@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurboAssist AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .chat-container {
+            padding: 30px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: 50px;
+        }
+        .bot-message {
+            background: #f0f0f0;
+            margin-right: 50px;
+        }
+        .citations {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        .input-container {
+            padding: 20px 30px 30px;
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background: #5568d3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 TurboAssist AI</h1>
+            <p>Intelligent Technical Knowledge Assistant</p>
+        </div>
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot-message">
+                Hello! I'm TurboAssist AI. Ask me any technical question about turbomachinery maintenance.
+            </div>
+        </div>
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="questionInput" 
+                placeholder="Ask a question..."
+                onkeypress="if(event.key==='Enter') askQuestion()"
+            >
+            <button onclick="askQuestion()" id="askButton">Ask</button>
+        </div>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const input = document.getElementById('questionInput');
+            const question = input.value.trim();
+            if (!question) return;
+
+            const chatContainer = document.getElementById('chatContainer');
+            const askButton = document.getElementById('askButton');
+
+            // Add user message
+            chatContainer.innerHTML += `
+                <div class="message user-message">${question}</div>
+            `;
+            input.value = '';
+            askButton.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:8000/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: question, top_k: 5 })
+                });
+
+                const data = await response.json();
+
+                // Add bot message
+                const citations = data.citations.join(', ');
+                chatContainer.innerHTML += `
+                    <div class="message bot-message">
+                        ${data.answer}
+                        <div class="citations"><strong>Sources:</strong> ${citations}</div>
+                    </div>
+                `;
+            } catch (error) {
+                chatContainer.innerHTML += `
+                    <div class="message bot-message" style="background: #ffe0e0;">
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+
+            askButton.disabled = false;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
