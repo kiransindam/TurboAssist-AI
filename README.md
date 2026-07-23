@@ -485,6 +485,6 @@ Built as an end-to-end demonstration of AI/ML engineering capabilities for the *
 
 **🔧 Made with ❤️ for industrial AI**
 
-[Report Bug](https://github.com/YOUR_USERNAME/turboassist-platform/issues) · [Request Feature](https://github.com/YOUR_USERNAME/turboassist-platform/issues)
+[Report Bug](https://github.com/kiransindam/) · [Request Feature](https://github.com/kiransindam/TurboAssist-AI/tree/main)
 
 </div>
