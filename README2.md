@@ -300,3 +300,9 @@ Built as an end-to-end demonstration of AI/ML engineering capabilities for the *
 ---
 
 <div align="center">
+
+**⭐ If this project helped you, consider giving it a star!**
+
+Made with ❤️ for industrial AI
+
+</div>
