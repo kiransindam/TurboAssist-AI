@@ -1,0 +1,4 @@
+cd ml-predictive-maintenance
+pip install -r requirements.txt
+python train.py     # Train models
+python predict.py   # Run inference
