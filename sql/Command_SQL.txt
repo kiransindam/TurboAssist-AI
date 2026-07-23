@@ -1,0 +1,7 @@
+cd sql-maintenance-db
+python scripts/setup_db.py
+
+# Query using sqlite3 CLI
+sqlite3 data/maintenance.db
+> SELECT * FROM v_equipment_health;
+> .quit
