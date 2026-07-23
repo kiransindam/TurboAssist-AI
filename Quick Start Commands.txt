@@ -1,0 +1,14 @@
+# 1. Machine Learning
+cd ml-predictive-maintenance
+pip install -r requirements.txt
+python train.py && python predict.py
+
+# 2. Data Cleaning
+cd data-cleaning-pipeline
+pip install pandas numpy
+python clean_data.py
+
+# 3. SQL Database
+cd sql-maintenance-db
+python scripts/setup_db.py
+sqlite3 data/maintenance.db < sql/03_queries.sql
